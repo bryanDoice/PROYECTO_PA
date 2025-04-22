@@ -152,8 +152,6 @@ public class NombreDeLaClase {
 }
 ```
 ---
-## Gestor Web Index
-
 ## 🎨Diseño General (HTML Y CSS)
 
 -	El HTML crea la estructura visual: títulos, menús, formularios, tablas, etc.
@@ -174,7 +172,7 @@ function show_NombreAtributo() {
   fetchNombreAtributo();  Llamada genérica que deberías reemplazar por la función correspondiente
 }
 ```
-## Conexion con API
+## 🧷 Conexion con API
 Se realiza la conexión con una página web con una API REST para recibir datos desde el servidor y usarlos en el navegador. 
 Ejemplos como este conectan con la API REST (https://localhost:7198/api/...) para obtener o enviar información. 
 
@@ -186,7 +184,7 @@ fetch("https://localhost:7198/api/.....")
     // mostrar los datos en la tabla
   });
 ```
-## Manejo de formularios
+## 🔍 Manejo de formularios
 Este código se encarga de gestionar el envío de un formulario en una página web sin recargar la página. En la cual al revisar el formulario nos ayuda a prevenir el comportamiento por defecto del navegador, además de capturar los datos ingresados por el usuario en las cuales se envían los datos al servidor utilizando fetch() con una solicitud HTTP POST al endpoint de una API para después de que los datos se envíen correctamente con la función fetch_Nombre_De_Objeto para la actualización de la lista a mostrar en pantalla. 
 Cada sección tiene un formulario. 
 Por ejemplo:
@@ -216,7 +214,7 @@ document.getElementById("studentForm").addEventListener("submit", function (even
   });
 });
 ```
-## Gestión Dinámica de Estudiantes, Materias y Profesores
+## 🚀 Gestión Dinámica de Estudiantes, Materias y Profesores
 Forma parte del sistema de gestión académica y permite cargar dinámicamente información en formularios según selecciones previas del usuario.
 
 ### Plantilla:
@@ -247,29 +245,168 @@ fetch(`https://localhost:7198/api/Nombre_Formulario1/Nombre_Formulario2/${Id_For
 📌 NOTA:  Asegúrate de que el campo item.nombre y item.id coincidan con la estructura real del JSON que devuelve tu API.
 
 ---
+## 📋 Módulo de Gestion de Cursos
 
-## Estilos (styles.css)
+En este apartado nos permitira al usuario gestionar cursos academicoa a través de una interfaz dinamica que se comunica con una API REST.
+
+### Funcionalidades
+
+- ✅ Crear nuevos cursos mediante un formulario.
+- 📋 Mostrar todos los cursos en una tabla.
+- ✏️ Editar cursos directamente en la tabla.
+- ❌ Eliminar cursos con confirmación.
+
+### 🛠️ Descripcion Técnica
+
+- Se utiliza `fetch()` para realizar peticiones `POST`, `GET`, `PUT` y `DELETE` hacia `/api/cursos`.
+- La tabla se actualiza automáticamente tras cada operación gracias a la función `cargarCursos()`.
+- Al editar un curso, se intercambian dinámicamente elementos `span` e `input` para facilitar la edición en línea.
+- Mensajes visuales indican el éxito o error de las operaciones.
+
+## 📋 Módulo de Gestion de Estudiantes
+
+Nos permite listar, editar, eliminar y filtrar estudiantes desde una interfaz web, comunicándose con una API REST.
+
+### Funcionalidades
+
+- 📋 Listar estudiantes en una tabla dinámica con sus datos personales y la carrera asociada.
+- ✏️ Editar estudiantes en línea, incluyendo datos como:
+  - Nombre y apellido
+  - Fecha de nacimiento
+  - Email, dirección y teléfono
+  - Carrera asociada
+    
+- ✏️ Editar estudiantes, ya sea desde la tabla (modo en línea) o cargando los datos en el formulario para modificarlos.
+- ❌ Eliminar estudiantes con confirmación.
+- 🔍 Filtrar estudiantes por carrera usando un selector desplegable
+- 🔄 Actualización automática de la tabla tras cada operación.
+- 📥 Cargar carreras desde el backend para el formulario de registro de estudiantes.
+  
+### 🛠️ Detalles Técnicos:
+
+- Se utiliza fetch() para realizar peticiones HTTP:
+   - GET para obtener estudiantes.
+   - POST para registrar uno nuevo.
+   - PUT para actualizar datos.
+   - DELETE para eliminar por ID.
+
+- Las carreras se gestionan mediante un arreglo auxiliar (carreras) que enlaza carreraId con el nombre mostrado.
+-  La función `cargarCarrerasFormulario()` se encarga de obtener las carreras disponibles y llenar el `<select>` correspondiente en el formulario.
+- Al editar desde la tabla, los span se reemplazan por input y select, y se muestran botones de "Guardar" y "Cancelar".
+- Las fechas de nacimiento se formatean en estilo DD/MM/AAAA con toLocaleDateString.
+- Incluye manejo de errores con alertas y mensajes personalizados para mejorar la experiencia del usuario.
+
+## 📋 Módulo de Gestion de Docentes
+
+Nos permite listar, editar, eliminar y filtrar profesores desde una interfaz web, comunicándose con una API REST.
+
+### Funcionalidades
+
+- ➕ Registrar profesores mediante un formulario con los siguientes campos:
+   - Nombre y apellido
+   - Fecha de nacimiento
+   - Email, dirección y teléfono
+- 📋 Listar todos los profesores en una tabla dinámica.
+- ✏️ Editar profesores en línea desde la tabla, con opción de cancelar o guardar cambios.
+- ❌ Eliminar profesores con confirmación de seguridad.
+- 🔄 Actualización automática de la tabla luego de cualquier acción.
+  
+### 🛠️ Detalles Técnicos:
+
+- Se usa fetch() para interactuar con el endpoint /api/profesores mediante:
+   - GET para obtener la lista.
+   - POST para registrar un nuevo profesor.
+   - PUT para editar un profesor existente.
+   - DELETE para eliminar por ID.
+
+- Cada fila de la tabla contiene botones que cambian entre modo visual y modo edición.
+- Los campos visuales (span) se convierten en campos editables (input) al activar la edición.
+- La fecha de nacimiento se presenta en formato local (DD/MM/AAAA) usando toLocaleDateString().
+- Las acciones se reflejan automáticamente en la tabla gracias a la función obtenerProfesores() que recarga la información.
+
+## 📋 Módulo de Asignación de Materias a Carreras y Profesores
+
+Permite asignar materias a carreras específicas junto a un profesor responsable.
+
+### Funcionalidades
+
+- ➕ **Asignar materias a carreras** indicando:
+  - La carrera
+  - La materia
+  - El profesor encargado
+  - El semestre correspondiente
+- 📋 **Listar todas las asignaciones** en una tabla con nombres de referencia (carrera, materia y profesor).
+- ❌ **Eliminar asignaciones existentes** con confirmación.
+- 🔄 **Recarga automática** de la tabla luego de registrar o eliminar una asignación.
+
+### 🛠️ Detalles técnicos:
+- Utiliza `fetch()` para acceder a los siguientes endpoints:
+  - `GET /api/MatriculaCarrera`: lista todas las asignaciones.
+  - `POST /api/MatriculaCarrera`: crea una nueva asignación.
+  - `DELETE /api/MatriculaCarrera/{id}`: elimina una asignación.
+- Al cargar la tabla, se hace una consulta paralela (`Promise.all`) a:
+  - `/api/Carreras` para obtener nombres de carreras.
+  - `/api/Cursos` para obtener nombres de materias.
+  - `/api/Profesores` para mostrar nombres completos de los docentes.
+- Los formularios desplegables se rellenan automáticamente con las opciones disponibles.
+- Los datos son renderizados dinámicamente en el `tbody` de una tabla HTML con botones de acción por fila.
+
+## 🧾 Módulo de Matrícula de Estudiantes
+
+En este espacio nos permite realizar la matrícula de estudiantes en materias específicas según su carrera, semestre y el profesor asignado. Todo el proceso es interactivo y se realiza con validación y carga dinámica desde la API.
+
+### Funcionalidades clave:
+
+- 🔄 **Carga dinámica de carreras** desde `/api/matricula/carreraMatricula`.
+- 🎓 **Filtrado automático de estudiantes** por carrera.
+- 📘 **Filtrado de materias** según carrera y semestre.
+- 👨‍🏫 **Filtrado de profesores** por carrera, semestre y materia.
+- ⏰ **Selección de horario y fecha** de matrícula.
+- 📥 **Registro de matrícula** al hacer submit en el formulario:
+  - Valida los campos.
+  - Consulta el ID de `materiaPorCarrera`.
+  - Envía los datos al endpoint `POST /api/Matricula`.
+  - Muestra mensajes de éxito o error al usuario.
+
+### 🛠️ Detalle técnico:
+1. Al seleccionar una **carrera**, se filtran los estudiantes, materias y profesores disponibles.
+2. Al cambiar el **semestre**, se actualizan las materias y profesores.
+3. Al elegir una **materia**, se filtran los profesores disponibles.
+4. El formulario final recoge:
+   - Estudiante
+   - Carrera
+   - Semestre
+   - Materia
+   - Profesor
+   - Horario
+   - Fecha
+5. El sistema consulta el ID exacto de `materiaPorCarrera` y, si existe, registra la matrícula.
+
+✅ Este módulo asegura una matrícula precisa, dinámica y validada en todo momento.
+
+---
+## 🎨 Estilos (styles.css)
 Define el diseño visual de la interfaz del sistema web de gestion academico. Presenta una apariencia moderna y oscura, con detalles en colores brillantes para destacar elementos claves.
 
-### Diseño General
+### 🖌️ Diseño General
 Fondo con **degradado lineal** en tonos oscuros (`#0f2027`, `#203a43`, `#2c5364`) para dar una estética profesional.
 - Tipografía sencilla (`sans-serif`) y colores blancos para buen contraste y legibilidad.
 - Distribución de componentes en **diseño horizontal** mediante `flex`, alineando `sidebar` y `main-content`.
 
-### Sidebar (Barra lateral)
+### 🧑‍🎨 Sidebar (Barra lateral)
 - Fondo sólido en color `#111827`.
 - Ancho reducido a `130px` para una apariencia compacta.
 - Menú vertical con enlaces destacados en color `#f43f5e`.
 
-### Contenido Principal
+### 🖌️ Contenido Principal
 - Fondo `#1e293b`, con secciones como `students-list`, `professors-list` y `courses-list` estilizadas en `#2d3748`.
 - Espaciado cómodo mediante `padding` y esquinas redondeadas (`border-radius: 8px`).
 
-### Tablas
+### 🧱 Tablas
 - Estilo personalizado para encabezados (`th`) y celdas (`td`) con tonos oscuros (`#374151`) y texto blanco.
 - Diseño limpio con `border-collapse` y buen espaciado interno (`padding: 10px`).
 
-### Botones
+### 🔲Botones
 - Estilos diferenciados para cada tipo de acción:
   - `edit-btn`: color rosa (`#f43f5e`).
   - `delete-btn`: color rojo (`#ef4444`).
